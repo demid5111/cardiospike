@@ -60,6 +60,9 @@ pyenv install 3.8.6
 poetry install
 poetry run pre-commit install  # для разработки
 ```
+
+Для macOS, также может потребоваться ```brew install libomp```.
+
 Скопировать `.env.example` в `.env`:
 ```bash
 cp .env.example .env

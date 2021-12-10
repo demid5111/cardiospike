@@ -35,3 +35,5 @@ DB_COLORS = {
     "yellow": "#ffbe00",
     "red": "#ff1c60",
 }
+
+API_E2E_ARTIFACTS_DIR = ROOT_DIR / 'tests' / 'artifacts'
