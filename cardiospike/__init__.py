@@ -37,3 +37,5 @@ DB_COLORS = {
 }
 
 API_E2E_ARTIFACTS_DIR = ROOT_DIR / 'tests' / 'artifacts'
+EVALUATION_REPORTS_DIR = DATA_DIR / 'evaluation_reports'
+EVALUATION_REPORTS_PATH = EVALUATION_REPORTS_DIR / 'full_report.csv'
