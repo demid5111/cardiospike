@@ -1,4 +1,5 @@
 import json
+import pytest
 from pathlib import Path
 from typing import Dict
 
@@ -21,6 +22,7 @@ def load_reference_response(api_route, user_id):
         return json.load(f)
 
 
+@pytest.mark.serial
 def test_read_main():
     user_id = '9'
     api_route = 'predict'

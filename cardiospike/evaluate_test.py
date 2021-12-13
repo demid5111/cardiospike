@@ -10,7 +10,8 @@ from cardiospike.api.models import Predictions
 from cardiospike.evaluate import create_analytics_report, analyze_report, initialize_environment, \
     classify_sequence, create_single_user_report_df
 
-@pytest.mark.unit_tests
+
+@pytest.mark.serial
 def test_evaluate_against_rest_api_server():
     data_df, model = initialize_environment(dataset_type='test', dataset_version='1.0')
     user_id = 9
@@ -23,7 +24,8 @@ def test_evaluate_against_rest_api_server():
 
     assert_frame_equal(predictions_df, expected_predictions_df), 'Predictions should be the same'
 
-@pytest.mark.unit_tests
+
+@pytest.mark.serial
 def test_evaluate_against_own_prediction_capability():
     report_df = create_analytics_report(dataset_type='train', dataset_version='1.0',
                                         user_ids=('1', '10', '265'), dump=False)
@@ -39,8 +41,8 @@ def test_evaluate_against_own_prediction_capability():
     assert pytest.approx(recall, abs=accepted_threshold) == expected_recall
     assert pytest.approx(expected_f1, abs=accepted_threshold) == expected_f1
 
-@pytest.mark.e2e
-@pytest.mark.skip(reason="skipped as E2E - too long to run each time")
+
+@pytest.mark.slow
 def test_evaluate_against_full_train_dataset():
     report_path = EVALUATION_REPORTS_PATH
     create_analytics_report(dataset_type='train', dataset_version='1.0',
