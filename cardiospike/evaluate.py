@@ -9,30 +9,31 @@ from cardiospike.api.inference import SmartModel
 from cardiospike.api.models import Predictions
 
 
+class NoSuchUserInDatasetError(Exception):
+    pass
+
+
 def load_test_dataset(version="1.0"):
     if version == '1.0':
-        df = pd.read_csv(Path(TEST_PATH))
-        # wt = pd.read_csv(Path(WELLTORY_PATH))
-        # df = pd.concat((df, wt))
-        users = [str(u) for u in df.id.unique()]
-        return df, users
+        return pd.read_csv(TEST_PATH)
     raise NotImplementedError
 
 
 def load_train_dataset(version="1.0"):
     if version == '1.0':
-        df = pd.read_csv(Path(TRAIN_DATA_PATH))
-        users = [str(u) for u in df.id.unique()]
-        return df, users
+        return pd.read_csv(TRAIN_DATA_PATH)
     raise NotImplementedError
 
 
-def load_analytics_report(version="1.0"):
-    if version == '1.0':
-        df = pd.read_csv(Path(EVALUATION_REPORTS_PATH))
-        users = [str(u) for u in df.id.unique()]
-        return df, users
+def load_analytics_report(version="1.0", reports_path=None):
+    if version == '1.0' and reports_path:
+        df = pd.read_csv(reports_path)
+        return df
     raise NotImplementedError
+
+
+def get_unique_user_ids(report_df):
+    return [str(u) for u in report_df.id.unique()]
 
 
 def get_user_data(dataset_df, user_id):
@@ -52,22 +53,14 @@ def classify_sequence(model, user_id, dataset_df):
     )
 
 
-def run_e2e(user_id, dataset_type, dataset_version):
-    data_df, users, model = initialize_environment(dataset_type, dataset_version)
-
-    predictions = classify_sequence(model, user_id, data_df)
-
-    return predictions
-
-
 def initialize_environment(dataset_type, dataset_version):
     model = SmartModel(str(SMART_MODEL_PATH))
 
     if dataset_type == 'test':
-        data_df, users = load_test_dataset(version=dataset_version)
+        data_df = load_test_dataset(version=dataset_version)
     else:  # 'train'
-        data_df, users = load_train_dataset(version=dataset_version)
-    return data_df, users, model
+        data_df = load_train_dataset(version=dataset_version)
+    return data_df, model
 
 
 def create_single_user_report_df(data_df, user_id, predictions):
@@ -78,28 +71,38 @@ def create_single_user_report_df(data_df, user_id, predictions):
     return user_df
 
 
-def create_analytics_report():
-    data_df, users, model = initialize_environment(dataset_type='train', dataset_version='1.0')
+def create_analytics_report(dataset_type, dataset_version, user_ids=None, dump=True, report_path: Path = None):
+    data_df, model = initialize_environment(dataset_type=dataset_type, dataset_version=dataset_version)
 
     frames = []
-    for i, user_id in enumerate(users):
-        print(f'Processing user {{{user_id}}} ({i + 1}/{len(users)} ...')
+    users_to_iterate = get_unique_user_ids(data_df) if user_ids is None else user_ids
+    for i, user_id in enumerate(users_to_iterate):
+        print(f'Processing user {{{user_id}}} ({i + 1}/{len(users_to_iterate)}) ...')
         predictions = classify_sequence(model, user_id, data_df)
         user_df = create_single_user_report_df(data_df, user_id, predictions)
         frames.append(user_df)
     res_df = pd.concat(frames)
-    res_df.to_csv(EVALUATION_REPORTS_DIR / 'full_report.csv', index=False)
+
+    if dump:
+        res_df.to_csv(report_path, index=False)
+    return res_df
 
 
 def filter_df(df, settings):
     res_df = df.loc[(df['y'] == settings['y']) & (df['y_predicted'] == settings['y_predicted'])]
     if settings['id'] is not None:
-        res_df = df.loc[(df['id'] == int(settings['id']))]
+        res_df = res_df.loc[(res_df['id'] == int(settings['id']))]
     return res_df
 
 
-def analyze_report(user_id=None):
-    report_df, _ = load_analytics_report()
+def analyze_report(user_id=None, report_df=None, report_path=None):
+    if report_df is None:
+        report_df = load_analytics_report(reports_path=report_path)
+
+    if user_id is not None:
+        res_df = report_df.loc[(report_df['id'] == int(user_id))]
+        if not len(res_df):
+            raise NoSuchUserInDatasetError()
 
     tp_df = filter_df(report_df, dict(y=1, y_predicted=1, id=user_id))
     tp = len(tp_df)
@@ -113,17 +116,18 @@ def analyze_report(user_id=None):
     fn_df = filter_df(report_df, dict(y=1, y_predicted=0, id=user_id))
     fn = len(fn_df)
 
-    precision = tp / (tp + fp)
-    recall = tp / (tp + fn)
-    f1 = (2 * precision * recall) / (precision + recall)
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+    recall = tp / (tp + fn) if (tp + fp) > 0 else 0
+    f1 = (2 * precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
     return precision, recall, f1
 
 
 def main():
-    # create_analytics_report()
+    report_path = EVALUATION_REPORTS_PATH
+    create_analytics_report(dataset_type='train', dataset_version='1.0',
+                            user_ids=None, dump=True, report_path=report_path)
 
-    precision, recall, f1 = analyze_report()
-    precision, recall, f1 = analyze_report()
+    precision, recall, f1 = analyze_report(report_path=report_path)
     print(f'Report:')
     print(f'    precision: {precision:.4f}')
     print(f'    recall: {recall:.4f}')
