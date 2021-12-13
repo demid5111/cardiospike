@@ -91,18 +91,26 @@ def create_analytics_report():
     res_df.to_csv(EVALUATION_REPORTS_DIR / 'full_report.csv', index=False)
 
 
-def analyze_report():
+def filter_df(df, settings):
+    res_df = df.loc[(df['y'] == settings['y']) & (df['y_predicted'] == settings['y_predicted'])]
+    if settings['id'] is not None:
+        res_df = df.loc[(df['id'] == int(settings['id']))]
+    return res_df
+
+
+def analyze_report(user_id=None):
     report_df, _ = load_analytics_report()
-    tp_df = report_df.loc[(report_df['y'] == 1) & (report_df['y_predicted'] == 1)]
+
+    tp_df = filter_df(report_df, dict(y=1, y_predicted=1, id=user_id))
     tp = len(tp_df)
 
-    fp_df = report_df.loc[(report_df['y'] == 0) & (report_df['y_predicted'] == 1)]
+    fp_df = filter_df(report_df, dict(y=0, y_predicted=1, id=user_id))
     fp = len(fp_df)
 
-    tn_df = report_df.loc[(report_df['y'] == 0) & (report_df['y_predicted'] == 0)]
+    tn_df = filter_df(report_df, dict(y=0, y_predicted=0, id=user_id))
     tn = len(tn_df)
 
-    fn_df = report_df.loc[(report_df['y'] == 1) & (report_df['y_predicted'] == 0)]
+    fn_df = filter_df(report_df, dict(y=1, y_predicted=0, id=user_id))
     fn = len(fn_df)
 
     precision = tp / (tp + fp)
@@ -114,6 +122,7 @@ def analyze_report():
 def main():
     # create_analytics_report()
 
+    precision, recall, f1 = analyze_report()
     precision, recall, f1 = analyze_report()
     print(f'Report:')
     print(f'    precision: {precision:.4f}')
