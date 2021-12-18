@@ -1,5 +1,6 @@
 data/model-checkpoints
 data/submissions
+data/evaluation_reports
 *.csv
 *.joblib
 outputs
