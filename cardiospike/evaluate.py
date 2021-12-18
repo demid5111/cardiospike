@@ -3,8 +3,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from cardiospike import SMART_MODEL_PATH, TEST_PATH, WELLTORY_PATH, API_E2E_ARTIFACTS_DIR, TRAIN_DATA_PATH, \
-    EVALUATION_REPORTS_DIR, EVALUATION_REPORTS_PATH
+from cardiospike import SMART_MODEL_PATH, TEST_PATH, TRAIN_DATA_PATH, EVALUATION_REPORTS_PATH
 from cardiospike.api.inference import SmartModel
 from cardiospike.api.models import Predictions
 

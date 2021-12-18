@@ -1,14 +1,9 @@
-from pathlib import Path
-
-import pandas as pd
 from pandas._testing import assert_frame_equal
 import pytest
-from cardiospike import SMART_MODEL_PATH, TEST_PATH, WELLTORY_PATH, API_E2E_ARTIFACTS_DIR, EVALUATION_REPORTS_DIR, \
-    EVALUATION_REPORTS_PATH
-from cardiospike.api.inference import SmartModel
+from cardiospike import API_E2E_ARTIFACTS_DIR, EVALUATION_REPORTS_PATH
 from cardiospike.api.models import Predictions
 from cardiospike.evaluate import create_analytics_report, analyze_report, initialize_environment, \
-    classify_sequence, create_single_user_report_df
+    create_single_user_report_df
 
 
 @pytest.mark.serial
