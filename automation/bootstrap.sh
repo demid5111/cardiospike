@@ -17,14 +17,14 @@ eval "$(pyenv virtualenv-init -)"
 
 # 5. Install proper version of Python
 export PYTHON_VERSION="3.9.1"
-export is_installed=$(pyenv versions | grep $(PYTHON_VERSION))
+export is_installed=$(pyenv versions | grep $PYTHON_VERSION)
 
 if [ -z "$is_installed" ]; then
-  pyenv install $(PYTHON_VERSION)
+  pyenv install $PYTHON_VERSION
 fi
 
 # 6. Use proper version of Python
-pyenv global $(PYTHON_VERSION)
+pyenv global $PYTHON_VERSION
 
 # 7. Install poetry
 curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
