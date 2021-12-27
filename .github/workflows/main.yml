@@ -41,6 +41,5 @@ jobs:
         run: |
           ls -la
           ls -la .venv
-          ls -la .venv/cardiospike
           source .venv/bin/activate
           python -m pytest .
