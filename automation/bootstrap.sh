@@ -35,6 +35,6 @@ export PATH=$HOME/.poetry/bin:$PATH
 poetry --version
 
 # 8. Install project dependencies
-pyenv use $PYTHON_VERSION
+pyenv local $PYTHON_VERSION
 pip --version
 poetry install
