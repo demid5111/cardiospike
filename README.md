@@ -166,3 +166,30 @@ train:
 ```bash
 poetry run cardiospike/models/cardio_net/search.py n_trials=10 train.num_workers=8 train.max_epochs=10
 ```
+
+### Running evaluation script for the existing open-source model
+
+> NOTE: those are instructions for the Ubuntu 20.04 OS. They might vary depending on your target OS!
+
+1. Clone repo:
+   
+    ```bash
+    git clone https://github.com/demid5111/cardiospike
+    ```
+
+2. Change working directory to the root of the project:
+
+    ```bash
+    cd  cardiospike
+    ```
+3. Run bootstrap script:
+    
+    ```bash
+    bash automation/bootstrap.sh
+    ```
+
+4. Run evaluation script:
+
+    ```bash
+    python cardiospike/evaluate.py
+    ```
