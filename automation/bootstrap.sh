@@ -27,8 +27,8 @@ fi
 pyenv global $PYTHON_VERSION
 
 # 7. Install poetry
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
-export PATH=$HOME/.poetry/bin:$PATH
+curl -sSL https://install.python-poetry.org | python -
+#export PATH=$HOME/.local/bin:$PATH
 poetry --version
 
 # 8. Install project dependencies
