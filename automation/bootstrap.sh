@@ -13,7 +13,7 @@ curl https://pyenv.run | bash
 
 # 4. Activate pyenv
 export PATH="~/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
+eval "$(pyenv init --path)"
 eval "$(pyenv virtualenv-init -)"
 
 # 5. Install proper version of Python
@@ -25,7 +25,7 @@ if [ -z "$is_installed" ]; then
 fi
 
 # 6. Use proper version of Python
-#pyenv global $PYTHON_VERSION
+pyenv global $PYTHON_VERSION
 
 # 7. Install poetry
 echo "before poetry"
@@ -35,6 +35,5 @@ export PATH=$HOME/.poetry/bin:$PATH
 poetry --version
 
 # 8. Install project dependencies
-pyenv local $PYTHON_VERSION
 pip --version
 poetry install
