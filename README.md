@@ -188,8 +188,15 @@ poetry run cardiospike/models/cardio_net/search.py n_trials=10 train.num_workers
     bash automation/bootstrap.sh
     ```
 
-4. Run evaluation script:
+4. Setup current session:
+   
+   ```bash
+   export PATH=$HOME/.poetry/bin:$PATH
+   export PYTHONPATH=($cwd):$PYTHONPATH
+   ```
 
+5. Run the script:
+   
     ```bash
-    python cardiospike/evaluate.py
+    poetry run python cardiospike/evaluate.py
     ```
