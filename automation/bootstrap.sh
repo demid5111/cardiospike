@@ -24,7 +24,7 @@ if [ -z "$is_installed" ]; then
 fi
 
 # 6. Use proper version of Python
-pyenv global $PYTHON_VERSION
+#pyenv global $PYTHON_VERSION
 
 # 7. Install poetry
 curl -sSL https://install.python-poetry.org | python -
@@ -32,5 +32,6 @@ curl -sSL https://install.python-poetry.org | python -
 poetry --version
 
 # 8. Install project dependencies
-#pyenv use $(PYTHON_VERSION)
+pyenv use $PYTHON_VERSION
+pip --version
 poetry install
