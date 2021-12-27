@@ -3,7 +3,8 @@ sudo apt-get --yes update
 
 # 2. Install dependencies for pyenv.
 # We will need pyenv for installing particular Python version
-sudo apt-get install --yes git make build-essential libssl-dev zlib1g-dev \
+sudo apt-get install --yes git python3-pip \
+      make build-essential libssl-dev zlib1g-dev \
       libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
       libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
