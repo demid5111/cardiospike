@@ -16,8 +16,8 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
 # 5. Install proper version of Python
-PYTHON_VERSION="3.9.1"
-is_installed=$(pyenv versions | grep $(PYTHON_VERSION))
+export PYTHON_VERSION="3.9.1"
+export is_installed=$(pyenv versions | grep $(PYTHON_VERSION))
 
 if [ -z "$is_installed" ]; then
   pyenv install $(PYTHON_VERSION)
@@ -31,4 +31,5 @@ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poet
 poetry --version
 
 # 8. Install project dependencies
+#pyenv use $(PYTHON_VERSION)
 poetry install
