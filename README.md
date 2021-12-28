@@ -191,7 +191,9 @@ poetry run cardiospike/models/cardio_net/search.py n_trials=10 train.num_workers
 4. Setup current session:
    
    ```bash
-   export PATH=$HOME/.poetry/bin:$PATH
+   export PATH=$HOME/.local/bin/:~/.pyenv/bin:$PATH
+   eval "$(pyenv init --path)"
+   eval "$(pyenv virtualenv-init -)"
    export PYTHONPATH=($cwd):$PYTHONPATH
    ```
 

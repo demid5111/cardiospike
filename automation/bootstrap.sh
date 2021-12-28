@@ -28,9 +28,7 @@ fi
 pyenv global $PYTHON_VERSION
 
 # 7. Install poetry
-echo "before poetry"
 curl -sSL https://install.python-poetry.org | python -
-echo "installed poetry"
 export PATH=$HOME/.local/bin/:$PATH
 poetry --version
 
