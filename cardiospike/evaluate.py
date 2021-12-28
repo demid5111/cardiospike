@@ -83,6 +83,8 @@ def create_analytics_report(dataset_type, dataset_version, user_ids=None, dump=T
     res_df = pd.concat(frames)
 
     if dump:
+        parent_path = report_path.parent
+        parent_path.mkdir(parents=True, exist_ok=True)
         res_df.to_csv(report_path, index=False)
     return res_df
 
