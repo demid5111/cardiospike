@@ -171,24 +171,30 @@ poetry run cardiospike/models/cardio_net/search.py n_trials=10 train.num_workers
 
 > NOTE: those are instructions for the Ubuntu 20.04 OS. They might vary depending on your target OS!
 
+1. Update machine (if needed):
+   
+   ```bash
+   sudo apt-get --yes update
+   sudo apt install --yes git
+   ```
 1. Clone repo:
    
     ```bash
     git clone https://github.com/demid5111/cardiospike
     ```
 
-2. Change working directory to the root of the project:
+1. Change working directory to the root of the project:
 
     ```bash
     cd  cardiospike
     ```
-3. Run bootstrap script:
+1. Run bootstrap script:
     
     ```bash
     bash automation/bootstrap.sh
     ```
 
-4. Setup current session:
+1. Setup current session:
    
    ```bash
    export PATH=$HOME/.local/bin/:~/.pyenv/bin:$PATH
@@ -197,7 +203,7 @@ poetry run cardiospike/models/cardio_net/search.py n_trials=10 train.num_workers
    export PYTHONPATH=($cwd):$PYTHONPATH
    ```
 
-5. Run the script:
+1. Run the script:
    
     ```bash
     poetry run python cardiospike/evaluate.py
